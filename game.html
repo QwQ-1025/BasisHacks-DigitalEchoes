@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Echoes — The Deep</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #game-wrapper {
+      display: flex; justify-content: center; align-items: center;
+      min-height: calc(100vh - 60px); padding-top: 60px;
+    }
+    #game-container { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .game-instructions {
+      text-align: center; padding: 1rem; color: var(--text-secondary);
+      font-family: var(--font-mono); font-size: 0.8rem;
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      background: rgba(10,10,15,0.9); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1.5rem; z-index: 100;
+    }
+    .game-instructions span { color: var(--accent-cyan); }
+  </style>
+</head>
+<body>
+  <div class="scan-line"></div>
+
+  <nav class="nav">
+    <a href="index.html">Surface</a>
+    <span class="nav-divider"></span>
+    <a href="app.html">Reveal</a>
+    <span class="nav-divider"></span>
+    <a href="game.html" class="active">Deep</a>
+  </nav>
+
+  <div id="game-wrapper">
+    <div id="game-container"></div>
+  </div>
+
+  <div class="game-instructions">
+    <span>ARROWS / WASD</span> Move &nbsp;|&nbsp;
+    <span>Collect</span> truth fragments &nbsp;|&nbsp;
+    <span>Avoid</span> trackers &nbsp;|&nbsp;
+    Reach portals to dive deeper
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
