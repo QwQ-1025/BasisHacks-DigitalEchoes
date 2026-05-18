@@ -5,6 +5,33 @@
 
 var TILE_SIZE = 32;
 
+// --- DOM Keyboard State (Mac fallback) ---
+var domKeys = { up: false, down: false, left: false, right: false, enter: false, space: false };
+var domEnterJustPressed = false;
+var domSpaceJustPressed = false;
+
+document.addEventListener('keydown', function(e) {
+  switch(e.key) {
+    case 'ArrowUp': case 'w': case 'W': domKeys.up = true; e.preventDefault(); break;
+    case 'ArrowDown': case 's': case 'S': domKeys.down = true; e.preventDefault(); break;
+    case 'ArrowLeft': case 'a': case 'A': domKeys.left = true; e.preventDefault(); break;
+    case 'ArrowRight': case 'd': case 'D': domKeys.right = true; e.preventDefault(); break;
+    case 'Enter': domKeys.enter = true; domEnterJustPressed = true; e.preventDefault(); break;
+    case ' ': domKeys.space = true; domSpaceJustPressed = true; e.preventDefault(); break;
+  }
+});
+
+document.addEventListener('keyup', function(e) {
+  switch(e.key) {
+    case 'ArrowUp': case 'w': case 'W': domKeys.up = false; break;
+    case 'ArrowDown': case 's': case 'S': domKeys.down = false; break;
+    case 'ArrowLeft': case 'a': case 'A': domKeys.left = false; break;
+    case 'ArrowRight': case 'd': case 'D': domKeys.right = false; break;
+    case 'Enter': domKeys.enter = false; break;
+    case ' ': domKeys.space = false; break;
+  }
+});
+
 // --- Level Definitions ---
 var LEVELS = [
   {
@@ -198,7 +225,9 @@ class MenuScene extends Phaser.Scene {
 
   update() {
     if (Phaser.Input.Keyboard.JustDown(this.enterKey) ||
-        Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
+        Phaser.Input.Keyboard.JustDown(this.spaceKey) ||
+        domEnterJustPressed || domSpaceJustPressed) {
+      domEnterJustPressed = false; domSpaceJustPressed = false;
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }
   }
@@ -407,33 +436,28 @@ class GameScene extends Phaser.Scene {
   update() {
     if (!this.player || !this.player.active) return;
 
+    // Movement — check both Phaser keys AND DOM-level keys (Mac fallback)
     var speed = 180, vx = 0, vy = 0;
-    if (this.cursors.left.isDown || this.wasd.left.isDown) vx = -speed;
-    if (this.cursors.right.isDown || this.wasd.right.isDown) vx = speed;
-    if (this.cursors.up.isDown || this.wasd.up.isDown) vy = -speed;
-    if (this.cursors.down.isDown || this.wasd.down.isDown) vy = speed;
+    if (this.cursors.left.isDown || this.wasd.left.isDown || domKeys.left) vx = -speed;
+    if (this.cursors.right.isDown || this.wasd.right.isDown || domKeys.right) vx = speed;
+    if (this.cursors.up.isDown || this.wasd.up.isDown || domKeys.up) vy = -speed;
+    if (this.cursors.down.isDown || this.wasd.down.isDown || domKeys.down) vy = speed;
     if (vx !== 0 && vy !== 0) { vx *= 0.707; vy *= 0.707; }
     this.player.setVelocity(vx, vy);
     if (vx !== 0 || vy !== 0) this.player.rotation = Math.atan2(vy, vx);
 
-    // Enemy patrol — FILTER active enemies
+    // Enemy CHASE AI — enemies pursue the player
     var self = this;
+    var playerX = this.player.x, playerY = this.player.y;
     this.enemies.getChildren().filter(function(e) { return e.active; }).forEach(function(en) {
-      var axis = en.getData('patrolAxis');
-      var range = en.getData('patrolRange');
-      var ox = en.getData('patrolX'), oy = en.getData('patrolY');
-      var speed = LEVELS[self.currentLevel].enemySpeed;
-
-      if (axis === 'x') {
-        if (en.x >= ox + range / 2) en.setData('patrolDir', -1);
-        if (en.x <= ox - range / 2) en.setData('patrolDir', 1);
-        en.setVelocityX(speed * en.getData('patrolDir'));
-        en.setVelocityY(0);
-      } else {
-        if (en.y >= oy + range / 2) en.setData('patrolDir', -1);
-        if (en.y <= oy - range / 2) en.setData('patrolDir', 1);
-        en.setVelocityY(speed * en.getData('patrolDir'));
-        en.setVelocityX(0);
+      // Calculate direction toward player
+      var dx = playerX - en.x;
+      var dy = playerY - en.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 0) {
+        var espeed = LEVELS[self.currentLevel].enemySpeed;
+        en.setVelocityX((dx / dist) * espeed);
+        en.setVelocityY((dy / dist) * espeed);
       }
     });
 
@@ -492,7 +516,8 @@ class GameOverScene extends Phaser.Scene {
   }
 
   update() {
-    if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+    if (Phaser.Input.Keyboard.JustDown(this.enterKey) || domEnterJustPressed) {
+      domEnterJustPressed = false;
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }
   }
@@ -558,7 +583,8 @@ class WinScene extends Phaser.Scene {
   }
 
   update() {
-    if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+    if (Phaser.Input.Keyboard.JustDown(this.enterKey) || domEnterJustPressed) {
+      domEnterJustPressed = false;
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }
   }
