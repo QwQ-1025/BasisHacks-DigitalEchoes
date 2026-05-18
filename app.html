@@ -62,9 +62,25 @@
         <div class="tracker-list" id="trackerList"></div>
       </div>
 
+      <!-- What Platforms Collect -->
+      <div class="card card-full animate-in delay-3">
+        <div class="card-title">What Major Platforms Collect About You</div>
+        <div class="platform-grid" id="platformGrid"></div>
+        <p style="color:var(--text-secondary);font-size:0.75rem;margin-top:1rem;text-align:center;">
+          Sources: Company privacy policies, EFF, Consumer Reports (2024)
+        </p>
+      </div>
+
+      <!-- Privacy Checklist -->
+      <div class="card animate-in delay-3">
+        <div class="card-title">Privacy Protection Checklist</div>
+        <div id="privacyChecklist"></div>
+        <div id="checklistProgress" style="margin-top:1rem;color:var(--accent-cyan);font-family:var(--font-mono);font-size:0.85rem;"></div>
+      </div>
+
       <!-- Protection Tips -->
       <div class="card animate-in delay-3">
-        <div class="card-title">Reduce Your Digital Footprint</div>
+        <div class="card-title">Quick Protection Tips</div>
         <ul class="tips-list">
           <li>Use a privacy-focused browser (Firefox, Brave) with tracking protection</li>
           <li>Install an ad/tracker blocker like uBlock Origin</li>
@@ -75,9 +91,29 @@
         </ul>
       </div>
 
+      <!-- Privacy Legislation Timeline -->
+      <div class="card card-full animate-in delay-3">
+        <div class="card-title">Global Privacy Legislation Timeline</div>
+        <div class="chart-container" style="height:300px;"><canvas id="privacyLawChart"></canvas></div>
+      </div>
+
+      <!-- Data Broker Database -->
+      <div class="card card-full animate-in delay-3">
+        <div class="card-title">The Data Broker Database</div>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1rem;">
+          These companies collect, buy, and sell your personal data. Most people have never heard of them.
+        </p>
+        <div style="overflow-x:auto;">
+          <table class="broker-table">
+            <thead><tr><th>Broker</th><th>What They Collect</th><th>Profiles</th><th>You Can Opt Out?</th></tr></thead>
+            <tbody id="brokerTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Data Breach Timeline -->
       <div class="card card-full animate-in delay-3">
-        <div class="card-title">Major Data Breaches (Records Exposed)</div>
+        <div class="card-title">Major Data Breaches 2013-2024 (Records Exposed)</div>
         <div class="chart-container" style="height:300px;"><canvas id="breachChart"></canvas></div>
       </div>
     </div>

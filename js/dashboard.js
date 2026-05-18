@@ -7,12 +7,15 @@
 var selectedHabits = [];
 
 // Chart instances (for updating)
-var trailChart, collectorChart, breachChart;
+var trailChart, collectorChart, breachChart, privacyLawChart;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
   buildHabitGrid();
   buildTrackerList();
+  buildPlatformCards();
+  buildChecklist();
+  buildBrokerTable();
   initCharts();
 });
 
@@ -152,6 +155,33 @@ function initCharts() {
       scales: { x: { ticks: { color: '#8b949e', maxRotation: 90, font: { size: 9 } }, grid: { color: '#21262d' } }, y: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' }, type: 'logarithmic' } }
     }
   });
+
+  // Privacy law timeline chart
+  var lawCtx = document.getElementById('privacyLawChart').getContext('2d');
+  privacyLawChart = new Chart(lawCtx, {
+    type: 'line',
+    data: {
+      labels: privacyLaws.map(function(l) { return l.year; }),
+      datasets: [{
+        label: 'Cumulative Privacy Laws Passed',
+        data: privacyLaws.map(function(_, i) { return i + 1; }),
+        borderColor: '#bc8cff', backgroundColor: 'rgba(188,140,255,0.1)',
+        fill: true, tension: 0.3, pointBackgroundColor: '#bc8cff',
+        pointRadius: 6, pointHoverRadius: 9
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b949e' } },
+        tooltip: { callbacks: { label: function(ctx) { return privacyLaws[ctx.dataIndex].law + ' — ' + privacyLaws[ctx.dataIndex].region; } } }
+      },
+      scales: {
+        x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+        y: { ticks: { color: '#8b949e', stepSize: 1 }, grid: { color: '#21262d' }, title: { display: true, text: '# of Laws', color: '#8b949e' } }
+      }
+    }
+  });
 }
 
 // Update trail chart based on selected habits
@@ -184,5 +214,76 @@ function buildTrackerList() {
     div.className = 'tracker-item';
     div.innerHTML = '<span class="tracker-name">' + item.category + '</span><span class="tracker-count">' + item.trackers + ' trackers avg</span>';
     list.appendChild(div);
+  });
+}
+
+// Build platform data collection cards
+function buildPlatformCards() {
+  var grid = document.getElementById('platformGrid');
+  platformData.forEach(function(platform) {
+    var card = document.createElement('div');
+    card.className = 'platform-card';
+    var tagsHtml = platform.collects.map(function(item) {
+      return '<span class="platform-tag">' + item + '</span>';
+    }).join('');
+    card.innerHTML = '<div class="platform-card-name">' + platform.icon + ' ' + platform.name + '</div>' +
+      '<div class="platform-card-revenue">~$' + platform.annualRevenuePerUser + ' revenue/user/yr &bull; ' + platform.dataCategories + ' data categories</div>' +
+      '<div class="platform-card-tags">' + tagsHtml + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+// Build privacy checklist with progress tracking
+function buildChecklist() {
+  var container = document.getElementById('privacyChecklist');
+  // Use map to create checklist items
+  privacyChecklist.map(function(item) {
+    var div = document.createElement('div');
+    div.className = 'checklist-item';
+    div.innerHTML = '<input type="checkbox" id="chk_' + item.id + '" onchange="updateChecklistProgress()">' +
+      '<span class="checklist-text">' + item.text + '</span>' +
+      '<span class="checklist-badge badge-' + item.difficulty + '">' + item.difficulty + '</span>' +
+      '<span class="checklist-badge badge-' + item.impact + (item.impact === 'high' ? '' : '-impact') + '" style="margin-left:4px;">' + item.impact + '</span>';
+    div.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'INPUT') {
+        var cb = div.querySelector('input');
+        cb.checked = !cb.checked;
+        updateChecklistProgress();
+      }
+    });
+    container.appendChild(div);
+  });
+}
+
+// Update checklist progress
+function updateChecklistProgress() {
+  var total = privacyChecklist.length;
+  var checked = privacyChecklist.filter(function(item) {
+    var cb = document.getElementById('chk_' + item.id);
+    return cb && cb.checked;
+  }).length;
+  var container = document.getElementById('privacyChecklist');
+  var items = container.querySelectorAll('.checklist-item');
+  items.forEach(function(item, i) {
+    var cb = item.querySelector('input');
+    if (cb && cb.checked) { item.classList.add('checked'); }
+    else { item.classList.remove('checked'); }
+  });
+  var pct = Math.round((checked / total) * 100);
+  document.getElementById('checklistProgress').textContent = 'Progress: ' + checked + '/' + total + ' (' + pct + '%)';
+}
+
+// Build data broker table
+function buildBrokerTable() {
+  var tbody = document.getElementById('brokerTableBody');
+  dataBrokers.forEach(function(broker) {
+    var tr = document.createElement('tr');
+    var optOut = broker.name === 'Oracle (BlueKai)' || broker.name === 'LiveRamp' ? 'Yes' : 'Limited';
+    var optClass = optOut === 'Yes' ? 'opt-yes' : 'opt-no';
+    tr.innerHTML = '<td><strong>' + broker.name + '</strong></td>' +
+      '<td style="font-size:0.8rem;">' + broker.collects + '</td>' +
+      '<td class="profile-count">' + (broker.profiles / 1000000).toFixed(0) + 'M</td>' +
+      '<td class="' + optClass + '">' + optOut + '</td>';
+    tbody.appendChild(tr);
   });
 }

@@ -210,6 +210,60 @@ body {
   font-size: 0.9rem;
 }
 
+/* Platform cards */
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.platform-card {
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem; transition: all 0.3s ease; cursor: pointer;
+}
+.platform-card:hover { border-color: var(--accent-blue); box-shadow: var(--glow-blue); transform: translateY(-2px); }
+.platform-card-name { font-family: var(--font-mono); font-size: 1.1rem; color: var(--accent-blue); margin-bottom: 0.5rem; }
+.platform-card-revenue { color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.75rem; }
+.platform-card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.platform-tag {
+  font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px;
+  background: rgba(255,71,87,0.12); color: var(--accent-red);
+  white-space: nowrap;
+}
+
+/* Broker table */
+.broker-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.broker-table th {
+  text-align: left; padding: 0.75rem 1rem; color: var(--accent-blue);
+  font-family: var(--font-mono); text-transform: uppercase; font-size: 0.7rem;
+  letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
+}
+.broker-table td {
+  padding: 0.75rem 1rem; border-bottom: 1px solid rgba(48,54,61,0.5); color: var(--text-primary);
+}
+.broker-table tr:hover td { background: rgba(88,166,255,0.04); }
+.broker-table .opt-yes { color: var(--accent-cyan); }
+.broker-table .opt-no { color: var(--accent-red); }
+.broker-table .profile-count { font-family: var(--font-mono); color: var(--accent-purple); }
+
+/* Privacy checklist */
+.checklist-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.6rem 0.75rem; border-radius: 6px;
+  cursor: pointer; transition: all 0.2s ease; margin-bottom: 2px;
+}
+.checklist-item:hover { background: rgba(88,166,255,0.06); }
+.checklist-item input[type="checkbox"] {
+  accent-color: var(--accent-cyan); width: 16px; height: 16px; cursor: pointer; flex-shrink: 0;
+}
+.checklist-item.checked { opacity: 0.6; }
+.checklist-item.checked .checklist-text { text-decoration: line-through; color: var(--text-secondary); }
+.checklist-text { font-size: 0.85rem; flex: 1; }
+.checklist-badge {
+  font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 3px;
+  font-family: var(--font-mono); flex-shrink: 0;
+}
+.badge-easy { background: rgba(57,255,20,0.15); color: var(--accent-cyan); }
+.badge-medium { background: rgba(227,179,65,0.15); color: #e3b341; }
+.badge-hard { background: rgba(255,71,87,0.15); color: var(--accent-red); }
+.badge-high { background: rgba(57,255,20,0.12); color: var(--accent-cyan); font-size: 0.6rem; }
+.badge-medium-impact { background: rgba(227,179,65,0.12); color: #e3b341; font-size: 0.6rem; }
+
 /* --- Game Page (game.html) --- */
 .game-container { padding-top: 60px; }
 #gameCanvas { display: block; margin: 0 auto; }

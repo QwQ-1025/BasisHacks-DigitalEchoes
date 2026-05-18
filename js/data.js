@@ -66,3 +66,67 @@ var privacyStats = {
   dataBrokerMarketSize: 319000000000,  // Data broker market size in USD (2024)
   percentConcerned: 81                 // % of people concerned about data privacy
 };
+
+// Privacy legislation timeline
+var privacyLaws = [
+  { year: 1995, law: "EU Data Protection Directive", region: "European Union" },
+  { year: 2003, law: "CAN-SPAM Act", region: "United States" },
+  { year: 2012, law: "Personal Data Protection Act", region: "Singapore" },
+  { year: 2016, law: "GDPR (General Data Protection Regulation)", region: "European Union" },
+  { year: 2018, law: "CCPA (California Consumer Privacy Act)", region: "California, US" },
+  { year: 2020, law: "LGPD (Lei Geral de Protecao de Dados)", region: "Brazil" },
+  { year: 2021, law: "PIPL (Personal Information Protection Law)", region: "China" },
+  { year: 2022, law: "ADPPA (American Data Privacy)", region: "US (proposed)" },
+  { year: 2023, law: "EU AI Act (privacy provisions)", region: "European Union" },
+  { year: 2024, law: "Colorado Privacy Act enforced", region: "Colorado, US" }
+];
+
+// What major platforms collect about you
+var platformData = [
+  {
+    name: "Google",
+    icon: "🔍",
+    collects: ["Search history", "Location (every minute)", "YouTube watch history", "Voice recordings", "Email content (Gmail)", "App usage", "Device info", "Contacts"],
+    annualRevenuePerUser: 230,
+    dataCategories: 18
+  },
+  {
+    name: "Facebook (Meta)",
+    icon: "📘",
+    collects: ["Posts & reactions", "Messages (metadata)", "Location", "Offline purchases", "Web browsing (off-platform)", "Facial recognition data", "Device sensors", "Ad interactions"],
+    annualRevenuePerUser: 200,
+    dataCategories: 21
+  },
+  {
+    name: "TikTok",
+    icon: "🎵",
+    collects: ["Watch duration (per video)", "Keystroke patterns", "Clipboard content", "Device motion", "Location", "Contacts", "Facial features", "Voice patterns"],
+    annualRevenuePerUser: 45,
+    dataCategories: 16
+  },
+  {
+    name: "Amazon",
+    icon: "📦",
+    collects: ["Purchase history", "Search queries", "Alexa voice recordings", "Reading habits (Kindle)", "Streaming habits (Prime)", "Wishlist items", "Browsing behavior", "Shipping addresses"],
+    annualRevenuePerUser: 350,
+    dataCategories: 15
+  }
+];
+
+// Privacy protection checklist items
+var privacyChecklist = [
+  { id: "vpn", text: "Use a VPN to encrypt your internet traffic", difficulty: "easy", impact: "high" },
+  { id: "browser", text: "Switch to a privacy-focused browser (Firefox/Brave)", difficulty: "easy", impact: "high" },
+  { id: "ublock", text: "Install uBlock Origin to block trackers and ads", difficulty: "easy", impact: "high" },
+  { id: "passwords", text: "Use a password manager with unique passwords", difficulty: "easy", impact: "high" },
+  { id: "2fa", text: "Enable two-factor authentication everywhere", difficulty: "easy", impact: "high" },
+  { id: "cookies", text: "Clear cookies and browsing data regularly", difficulty: "easy", impact: "medium" },
+  { id: "social", text: "Review and limit social media privacy settings", difficulty: "medium", impact: "medium" },
+  { id: "messaging", text: "Use encrypted messaging (Signal, not SMS)", difficulty: "medium", impact: "high" },
+  { id: "search", text: "Use a private search engine (DuckDuckGo)", difficulty: "easy", impact: "medium" },
+  { id: "dns", text: "Use encrypted DNS (DNS over HTTPS)", difficulty: "medium", impact: "medium" },
+  { id: "permissions", text: "Audit app permissions on your phone", difficulty: "medium", impact: "high" },
+  { id: "brokers", text: "Request data removal from major data brokers", difficulty: "hard", impact: "high" },
+  { id: "email", text: "Use email aliases (SimpleLogin/Firefox Relay)", difficulty: "medium", impact: "medium" },
+  { id: "iot", text: "Secure smart home devices on a separate network", difficulty: "hard", impact: "medium" }
+];
