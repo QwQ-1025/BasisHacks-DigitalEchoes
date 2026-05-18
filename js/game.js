@@ -221,11 +221,20 @@ var MenuScene = new Phaser.Class({
       fontFamily: 'monospace', fontSize: '13px', color: '#58a6ff'
     }).setOrigin(0.5);
 
-    // Animated "press enter" blink
-    var blink = this.add.text(w / 2, h / 2 + 175, 'PRESS ENTER TO DIVE', {
+    // Animated "press enter" blink — also clickable as fallback
+    var blink = this.add.text(w / 2, h / 2 + 175, 'PRESS ENTER OR CLICK TO DIVE', {
       fontFamily: 'monospace', fontSize: '18px', color: '#39ff14'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
+    blink.on('pointerdown', function() {
+      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
+    }, this);
+    blink.on('pointerover', function() {
+      blink.setColor('#ffffff');
+    });
+    blink.on('pointerout', function() {
+      blink.setColor('#39ff14');
+    });
 
     // Floating particles
     for (var i = 0; i < 30; i++) {
@@ -576,10 +585,15 @@ var GameOverScene = new Phaser.Class({
       fontFamily: 'monospace', fontSize: '13px', color: '#58a6ff'
     }).setOrigin(0.5);
 
-    var blink = this.add.text(w / 2, h / 2 + 180, 'PRESS ENTER TO TRY AGAIN', {
+    var blink = this.add.text(w / 2, h / 2 + 180, 'PRESS ENTER OR CLICK TO TRY AGAIN', {
       fontFamily: 'monospace', fontSize: '16px', color: '#39ff14'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
+    blink.on('pointerdown', function() {
+      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
+    }, this);
+    blink.on('pointerover', function() { blink.setColor('#ffffff'); });
+    blink.on('pointerout', function() { blink.setColor('#39ff14'); });
 
     this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   },
@@ -628,10 +642,15 @@ var WinScene = new Phaser.Class({
       fontFamily: 'monospace', fontSize: '13px', color: '#58a6ff'
     }).setOrigin(0.5);
 
-    var blink = this.add.text(w / 2, h / 2 + 200, 'PRESS ENTER TO PLAY AGAIN', {
+    var blink = this.add.text(w / 2, h / 2 + 200, 'PRESS ENTER OR CLICK TO PLAY AGAIN', {
       fontFamily: 'monospace', fontSize: '16px', color: '#39ff14'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
+    blink.on('pointerdown', function() {
+      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
+    }, this);
+    blink.on('pointerover', function() { blink.setColor('#ffffff'); });
+    blink.on('pointerout', function() { blink.setColor('#39ff14'); });
 
     this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
