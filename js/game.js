@@ -233,19 +233,21 @@ var MenuScene = new Phaser.Class({
       this.tweens.add({ targets: p, y: p.y - 100 - Math.random() * 200, alpha: 0, duration: 3000 + Math.random() * 4000, repeat: -1, delay: Math.random() * 2000 });
     }
 
-    // Input — use addKey() (Phaser 3.60 API)
-    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    enterKey.once('down', function() {
-      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
-    }, this);
-    var spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    spaceKey.once('down', function() {
-      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
-    }, this);
+    // Store key references for update loop
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.add.text(w / 2, h - 40, 'BasisHacks 2026 — Digital Echoes', {
       fontFamily: 'monospace', fontSize: '11px', color: '#30363d'
     }).setOrigin(0.5);
+  },
+
+  update: function() {
+    // Use JustDown for reliable single-press detection (Phaser 3.60)
+    if (Phaser.Input.Keyboard.JustDown(this.enterKey) ||
+        Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
+      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
+    }
   }
 });
 
@@ -579,10 +581,13 @@ var GameOverScene = new Phaser.Class({
     }).setOrigin(0.5);
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
 
-    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    enterKey.once('down', function() {
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+  },
+
+  update: function() {
+    if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
-    }, this);
+    }
   }
 });
 
@@ -628,10 +633,7 @@ var WinScene = new Phaser.Class({
     }).setOrigin(0.5);
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
 
-    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    enterKey.once('down', function() {
-      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
-    }, this);
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
     // Particle celebration
     for (var i = 0; i < 50; i++) {
@@ -644,6 +646,12 @@ var WinScene = new Phaser.Class({
         duration: 2000 + Math.random() * 1000,
         delay: Math.random() * 500
       });
+    }
+  },
+
+  update: function() {
+    if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+      this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }
   }
 });
