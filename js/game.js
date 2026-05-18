@@ -233,11 +233,13 @@ var MenuScene = new Phaser.Class({
       this.tweens.add({ targets: p, y: p.y - 100 - Math.random() * 200, alpha: 0, duration: 3000 + Math.random() * 4000, repeat: -1, delay: Math.random() * 2000 });
     }
 
-    // Input
-    this.input.keyboard.on('keydown-ENTER', function() {
+    // Input — use addKey() (Phaser 3.60 API)
+    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    enterKey.once('down', function() {
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }, this);
-    this.input.keyboard.on('keydown-SPACE', function() {
+    var spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    spaceKey.once('down', function() {
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }, this);
 
@@ -577,7 +579,8 @@ var GameOverScene = new Phaser.Class({
     }).setOrigin(0.5);
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
 
-    this.input.keyboard.on('keydown-ENTER', function() {
+    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    enterKey.once('down', function() {
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }, this);
   }
@@ -625,7 +628,8 @@ var WinScene = new Phaser.Class({
     }).setOrigin(0.5);
     this.tweens.add({ targets: blink, alpha: 0.1, duration: 800, yoyo: true, repeat: -1 });
 
-    this.input.keyboard.on('keydown-ENTER', function() {
+    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    enterKey.once('down', function() {
       this.scene.start('GameScene', { level: 0, lives: 3, score: 0 });
     }, this);
 
