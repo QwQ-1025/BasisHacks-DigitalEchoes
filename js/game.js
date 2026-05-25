@@ -223,12 +223,13 @@ class BootScene extends Phaser.Scene {
 
   create() {
     // --- Player: green circle with white highlight ---
+    // Size: 22px diameter — fits through 32px tile gaps with ~5px margin per side
     var pg = this.make.graphics({ add: false });
     pg.fillStyle(0x39ff14, 1);
-    pg.fillCircle(7, 7, 7);               // main green body
+    pg.fillCircle(11, 11, 11);            // main green body
     pg.fillStyle(0xffffff, 0.3);
-    pg.fillCircle(5, 5, 2);               // small highlight (top-left)
-    pg.generateTexture('player', 14, 14);
+    pg.fillCircle(8, 8, 3);               // highlight (top-left)
+    pg.generateTexture('player', 22, 22);
     pg.destroy();
 
     // --- Fragment: blue diamond (truth crystal) ---
