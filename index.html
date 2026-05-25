@@ -7,10 +7,16 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <!-- Scanning line overlay — glitch aesthetic hinting that something is wrong -->
   <div class="scan-line"></div>
+
+  <!-- Background particle system (data bits floating upward) -->
   <canvas id="particleCanvas"></canvas>
 
-  <!-- Navigation -->
+  <!-- ============================================
+  Navigation — 3 layers: Surface / Reveal / Deep
+  ============================================ -->
   <nav class="nav">
     <a href="index.html" class="active">Surface</a>
     <span class="nav-divider"></span>
@@ -19,13 +25,18 @@
     <a href="game.html">Deep</a>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- ============================================
+  Hero Section — the "surface" that user first sees
+  ============================================ -->
   <main class="surface-container">
+
+    <!-- Glitch effect title uses CSS pseudo-elements (::before / ::after) -->
     <h1 class="glitch" data-text="What Lies Beneath Your Digital Life?">
       What Lies Beneath Your Digital Life?
     </h1>
     <p class="surface-subtitle">The internet you see is only 4%. The rest is hidden.</p>
 
+    <!-- Stat counters — animated on scroll via IntersectionObserver -->
     <div class="stat-grid">
       <div class="stat-card animate-in">
         <div class="stat-number" id="counter1">0</div>
@@ -47,8 +58,10 @@
       and invisible trackers. <strong>It's time to see what's beneath the surface.</strong>
     </p>
 
+    <!-- CTA transitions user from Surface → Reveal (app.html) -->
     <a href="app.html" class="cta-button">Dive Deeper</a>
 
+    <!-- Crack effects — visual "breaking surface" metaphor -->
     <div class="crack-container">
       <div class="crack" style="top:10%;left:20%;width:60%;height:1px;"></div>
       <div class="crack" style="top:30%;left:40%;width:30%;height:1px;"></div>
@@ -57,37 +70,45 @@
   </main>
 
   <script>
-    // Animated counter
+    // ============================================
+    // Animated Counter — eases from 0 to target
+    // Uses easing function: 1 - (1-t)^3 for smooth deceleration
+    // ============================================
     function animateCounter(el, target, duration) {
       const start = 0;
       const startTime = performance.now();
       function update(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
         el.textContent = Math.floor(start + (target - start) * eased).toLocaleString();
         if (progress < 1) requestAnimationFrame(update);
       }
       requestAnimationFrame(update);
     }
 
+    // Only animate counters when user scrolls them into view
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           animateCounter(document.getElementById('counter1'), 2500, 2000);
           animateCounter(document.getElementById('counter2'), 6000, 2500);
           animateCounter(document.getElementById('counter3'), 353, 2200);
-          observer.disconnect();
+          observer.disconnect(); // fire once, then stop watching
         }
       });
     });
     observer.observe(document.querySelector('.stat-grid'));
 
-    // Floating data particles
+    // ============================================
+    // Particle System — floating data bits
+    // 60 particles drifting upward with occasional "streams"
+    // ============================================
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
     const particles = Array.from({ length: 60 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -100,14 +121,17 @@
     function drawParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => {
+        // Float upward, wrap around when off-screen
         p.y -= p.speedY;
         p.x += p.speedX;
         if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; }
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
+
         ctx.fillStyle = `rgba(57, 255, 20, ${p.opacity})`;
         ctx.fillRect(p.x, p.y, p.size, p.size);
-        // Occasional data stream
+
+        // 2% chance each frame: draw a vertical "data stream" streak
         if (Math.random() < 0.02) {
           ctx.fillStyle = `rgba(88, 166, 255, ${p.opacity * 1.5})`;
           ctx.fillRect(p.x, p.y - 5, 1, 10);
@@ -117,6 +141,7 @@
     }
     drawParticles();
 
+    // Handle window resize — rebuild canvas to match new size
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;

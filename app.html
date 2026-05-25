@@ -10,6 +10,9 @@
   <div class="scan-line"></div>
   <canvas id="particleCanvas"></canvas>
 
+  <!-- ============================================
+  Navigation — 3 layers: Surface / Reveal / Deep
+  ============================================ -->
   <nav class="nav">
     <a href="index.html">Surface</a>
     <span class="nav-divider"></span>
@@ -19,66 +22,108 @@
   </nav>
 
   <main class="dashboard-container">
+
+    <!-- ============================================
+    Dashboard Header
+    ============================================ -->
     <header class="dashboard-header animate-in">
       <h1 class="dashboard-title">Privacy Pulse</h1>
       <p class="dashboard-subtitle">Revealing the hidden data trail beneath your digital life.</p>
     </header>
 
     <div class="dashboard-grid">
-      <!-- Habit Input -->
+
+      <!-- ============================================
+      Section 1: Habit Input Form
+      User checks boxes for their daily online activities
+      ============================================ -->
       <div class="card animate-in">
         <div class="card-title">Your Digital Habits</div>
-        <div class="habit-grid" id="habitGrid"></div>
+        <div class="habit-grid" id="habitGrid">
+          <!-- Populated by buildHabitGrid() in dashboard.js -->
+        </div>
         <button class="cta-button" style="margin-top:1rem;width:100%;font-size:0.9rem;padding:0.75rem;" onclick="updateAll()">
           Calculate My Digital Footprint
         </button>
       </div>
 
-      <!-- Privacy Score -->
+      <!-- ============================================
+      Section 2: Privacy Exposure Score
+      0-100 score with color-coded circle + meter bar
+      ============================================ -->
       <div class="card animate-in delay-1">
         <div class="card-title">Privacy Exposure Score</div>
         <div class="score-display">
           <div class="score-circle" id="scoreCircle">--</div>
           <div class="score-label" id="scoreLabel">Select your habits to begin</div>
-          <div class="score-meter"><div class="score-meter-fill" id="scoreMeter" style="width:0%"></div></div>
+          <div class="score-meter">
+            <div class="score-meter-fill" id="scoreMeter" style="width:0%"></div>
+          </div>
         </div>
       </div>
 
-      <!-- Data Trail Chart -->
+      <!-- ============================================
+      Section 3: Daily Data Trail Bar Chart
+      Shows estimated data points per selected habit
+      ============================================ -->
       <div class="card animate-in delay-2">
         <div class="card-title">Your Daily Data Trail (Estimated)</div>
-        <div class="chart-container"><canvas id="trailChart"></canvas></div>
+        <div class="chart-container">
+          <canvas id="trailChart"></canvas>
+        </div>
       </div>
 
-      <!-- Who Collects Chart -->
+      <!-- ============================================
+      Section 4: Data Collectors Doughnut Chart
+      Who profits from your data?
+      ============================================ -->
       <div class="card animate-in delay-2">
         <div class="card-title">Who Collects Your Data?</div>
-        <div class="chart-container"><canvas id="collectorChart"></canvas></div>
+        <div class="chart-container">
+          <canvas id="collectorChart"></canvas>
+        </div>
       </div>
 
-      <!-- Hidden Trackers -->
+      <!-- ============================================
+      Section 5: Hidden Trackers by Category
+      Real data on how many trackers websites embed
+      ============================================ -->
       <div class="card animate-in delay-3">
         <div class="card-title">Hidden Trackers by Website Category</div>
-        <div class="tracker-list" id="trackerList"></div>
+        <div class="tracker-list" id="trackerList">
+          <!-- Populated by buildTrackerList() -->
+        </div>
       </div>
 
-      <!-- What Platforms Collect -->
+      <!-- ============================================
+      Section 6: Platform Data Collection Cards
+      What Google, Meta, TikTok, Amazon collect
+      ============================================ -->
       <div class="card card-full animate-in delay-3">
         <div class="card-title">What Major Platforms Collect About You</div>
-        <div class="platform-grid" id="platformGrid"></div>
+        <div class="platform-grid" id="platformGrid">
+          <!-- Populated by buildPlatformCards() -->
+        </div>
         <p style="color:var(--text-secondary);font-size:0.75rem;margin-top:1rem;text-align:center;">
           Sources: Company privacy policies, EFF, Consumer Reports (2024)
         </p>
       </div>
 
-      <!-- Privacy Checklist -->
+      <!-- ============================================
+      Section 7: Privacy Protection Checklist
+      Interactive — click to check items, track progress
+      ============================================ -->
       <div class="card animate-in delay-3">
         <div class="card-title">Privacy Protection Checklist</div>
-        <div id="privacyChecklist"></div>
+        <div id="privacyChecklist">
+          <!-- Populated by buildChecklist() -->
+        </div>
         <div id="checklistProgress" style="margin-top:1rem;color:var(--accent-cyan);font-family:var(--font-mono);font-size:0.85rem;"></div>
       </div>
 
-      <!-- Protection Tips -->
+      <!-- ============================================
+      Section 8: Quick Protection Tips
+      ============================================ -->
       <div class="card animate-in delay-3">
         <div class="card-title">Quick Protection Tips</div>
         <ul class="tips-list">
@@ -91,13 +136,21 @@
         </ul>
       </div>
 
-      <!-- Privacy Legislation Timeline -->
+      <!-- ============================================
+      Section 9: Global Privacy Legislation Timeline
+      Line chart showing growing legal protections
+      ============================================ -->
       <div class="card card-full animate-in delay-3">
         <div class="card-title">Global Privacy Legislation Timeline</div>
-        <div class="chart-container" style="height:300px;"><canvas id="privacyLawChart"></canvas></div>
+        <div class="chart-container" style="height:300px;">
+          <canvas id="privacyLawChart"></canvas>
+        </div>
       </div>
 
-      <!-- Data Broker Database -->
+      <!-- ============================================
+      Section 10: Data Broker Database
+      Real broker names, what they collect, profile counts
+      ============================================ -->
       <div class="card card-full animate-in delay-3">
         <div class="card-title">The Data Broker Database</div>
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1rem;">
@@ -105,47 +158,80 @@
         </p>
         <div style="overflow-x:auto;">
           <table class="broker-table">
-            <thead><tr><th>Broker</th><th>What They Collect</th><th>Profiles</th><th>You Can Opt Out?</th></tr></thead>
-            <tbody id="brokerTableBody"></tbody>
+            <thead>
+              <tr>
+                <th>Broker</th>
+                <th>What They Collect</th>
+                <th>Profiles</th>
+                <th>You Can Opt Out?</th>
+              </tr>
+            </thead>
+            <tbody id="brokerTableBody">
+              <!-- Populated by buildBrokerTable() -->
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Data Breach Timeline -->
+      <!-- ============================================
+      Section 11: Major Data Breaches Timeline
+      Bar chart with log scale — highlights worst breaches
+      ============================================ -->
       <div class="card card-full animate-in delay-3">
         <div class="card-title">Major Data Breaches 2013-2024 (Records Exposed)</div>
-        <div class="chart-container" style="height:300px;"><canvas id="breachChart"></canvas></div>
+        <div class="chart-container" style="height:300px;">
+          <canvas id="breachChart"></canvas>
+        </div>
       </div>
+
     </div>
   </main>
 
+  <!-- External libraries loaded from CDN for faster loading -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Data must load before dashboard (dashboard references habitCategories, etc.) -->
   <script src="js/data.js"></script>
   <script src="js/dashboard.js"></script>
 
-  <!-- Particle background (same as surface) -->
+  <!-- ============================================
+  Particle Background — floating blue data specks
+  (same effect as index.html but with blue accents)
+  ============================================ -->
   <script>
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // 40 blue-shifted particles (vs 60 green on the surface page)
     const particles = Array.from({ length: 40 }, () => ({
-      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-      size: Math.random() * 1.5 + 0.5, speedY: Math.random() * 0.3 + 0.05,
-      speedX: (Math.random() - 0.5) * 0.2, opacity: Math.random() * 0.3 + 0.05
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 1.5 + 0.5,
+      speedY: Math.random() * 0.3 + 0.05,
+      speedX: (Math.random() - 0.5) * 0.2,
+      opacity: Math.random() * 0.3 + 0.05
     }));
+
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => {
-        p.y -= p.speedY; p.x += p.speedX;
+        p.y -= p.speedY;
+        p.x += p.speedX;
         if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; }
-        if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-        ctx.fillStyle = `rgba(88, 166, 255, ${p.opacity})`;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        ctx.fillStyle = `rgba(88, 166, 255, ${p.opacity})`; // blue tint
         ctx.fillRect(p.x, p.y, p.size, p.size);
       });
       requestAnimationFrame(draw);
     }
     draw();
-    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
 </html>

@@ -6,17 +6,35 @@
   <title>Digital Echoes — The Deep</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* Game-specific layout overrides */
     #game-wrapper {
-      display: flex; justify-content: center; align-items: center;
-      min-height: calc(100vh - 60px); padding-top: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 60px);
+      padding-top: 60px;
     }
-    #game-container { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    #game-container {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    /* Fixed instruction bar at bottom of screen */
     .game-instructions {
-      text-align: center; padding: 1rem; color: var(--text-secondary);
-      font-family: var(--font-mono); font-size: 0.8rem;
-      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
-      background: rgba(10,10,15,0.9); border: 1px solid var(--border);
-      border-radius: 8px; padding: 0.75rem 1.5rem; z-index: 100;
+      text-align: center;
+      padding: 1rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,10,15,0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      z-index: 100;
     }
     .game-instructions span { color: var(--accent-cyan); }
   </style>
@@ -24,6 +42,9 @@
 <body>
   <div class="scan-line"></div>
 
+  <!-- ============================================
+  Navigation — 3 layers: Surface / Reveal / Deep
+  ============================================ -->
   <nav class="nav">
     <a href="index.html">Surface</a>
     <span class="nav-divider"></span>
@@ -32,10 +53,12 @@
     <a href="game.html" class="active">Deep</a>
   </nav>
 
+  <!-- Phaser injects the game canvas into this div -->
   <div id="game-wrapper">
     <div id="game-container"></div>
   </div>
 
+  <!-- On-screen instructions so the player knows controls -->
   <div class="game-instructions">
     <span>ARROWS / WASD</span> Move &nbsp;|&nbsp;
     <span>Collect</span> truth fragments &nbsp;|&nbsp;
@@ -43,7 +66,9 @@
     Reach portals to dive deeper
   </div>
 
+  <!-- Phaser 3.60 loaded from CDN — handles 2D rendering + arcade physics -->
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <!-- Game logic: 6 levels, 5 scenes, chase AI, keyboard system -->
   <script src="js/game.js"></script>
 </body>
 </html>
