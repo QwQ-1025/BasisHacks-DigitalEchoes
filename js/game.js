@@ -648,7 +648,7 @@ class GameScene extends Phaser.Scene {
     // === Player Movement ===
     // Speed = 180 px/s. Diagonal movement normalized by 0.707 (≈ 1/√2)
     // so diagonal isn't faster than cardinal.
-    var speed = 180, vx = 0, vy = 0;
+    var speed = 198, vx = 0, vy = 0; // 180 +10%
     if (this.cursors.left.isDown || this.wasd.left.isDown || domKeys.left)   vx = -speed;
     if (this.cursors.right.isDown || this.wasd.right.isDown || domKeys.right) vx = speed;
     if (this.cursors.up.isDown || this.wasd.up.isDown || domKeys.up)         vy = -speed;
